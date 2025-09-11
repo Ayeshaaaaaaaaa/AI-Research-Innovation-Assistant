@@ -1,54 +1,195 @@
-# Aria Crew
+# ARIA CrewAI Research Assistant
 
-Welcome to the Aria Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+## 🚀 Enhanced with 503 Error Prevention and Health Monitoring
 
-## Installation
+ARIA is a research-oriented AI assistant system that uses CrewAI to orchestrate multiple AI agents for content generation, fact-checking, summarization, and academic research. This enhanced version includes comprehensive health monitoring, error prevention, and deployment readiness to eliminate **503 Service Temporarily Unavailable** errors.
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+## ✨ Key Features
 
-First, if you haven't already, install uv:
+### Core Functionality
+- **Multi-Agent Research Pipeline**: Coordinated agents for research, fact-checking, summarization, writing, and review
+- **Configurable Workflows**: YAML-based agent and task configuration
+- **Tool Integration**: Extensible tool system for external API integration
+- **Sequential Processing**: Step-by-step task execution with dependency management
 
-```bash
-pip install uv
-```
+### Enhanced Reliability (NEW)
+- **🏥 Health Check System**: Comprehensive validation of system status and readiness
+- **🔄 Robust Startup**: Retry logic and graceful error handling for initialization
+- **📊 Resource Monitoring**: Real-time tracking of CPU, memory, and disk usage
+- **🌐 API Connectivity Testing**: External API validation with timeout handling
+- **⚠️ Error Handling**: Structured error tracking, categorization, and alerting
+- **🐳 Production Ready**: Docker deployment with health endpoints
 
-Next, navigate to your project directory and install the dependencies:
+## 🛠️ Quick Start
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+### Prerequisites
+- Python 3.10+
+- Optional: OpenAI API key
+- Optional: HuggingFace API token
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
-
-- Modify `src/aria/config/agents.yaml` to define your agents
-- Modify `src/aria/config/tasks.yaml` to define your tasks
-- Modify `src/aria/crew.py` to add your own logic, tools and specific args
-- Modify `src/aria/main.py` to add custom inputs for your agents and tasks
-
-## Running the Project
-
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+### Installation
 
 ```bash
-$ crewai run
+# Clone the repository
+git clone <repository-url>
+cd ARIA
+
+# Install dependencies
+pip install -r requirements.txt
+pip install -e .
+
+# Set up environment variables (optional)
+cp .env.example .env
+# Edit .env with your API keys
 ```
 
-This command initializes the ARIA Crew, assembling the agents and assigning them tasks as defined in your configuration.
+### Health Check (Recommended First Step)
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+```bash
+# Validate environment and configuration
+python src/aria/main.py validate
 
-## Understanding Your Crew
+# Run comprehensive health check
+python src/aria/main.py health
+```
 
-The ARIA Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+### Running ARIA
 
-## Support
+#### Option 1: With Health Monitoring (Recommended)
+```bash
+# Run with full health monitoring and error prevention
+python src/aria/main.py run
+```
 
-For support, questions, or feedback regarding the Aria Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+#### Option 2: Web Server Mode
+```bash
+# Start as web server with health endpoints
+python src/aria/main.py server --host 0.0.0.0 --port 8000
 
-Let's create wonders together with the power and simplicity of crewAI.
+# Test health endpoints
+curl http://localhost:8000/health
+curl http://localhost:8000/health/deep
+```
+
+#### Option 3: Basic Mode (Fallback)
+```bash
+# Run without health monitoring (if issues with enhanced features)
+python src/aria/main.py run-basic
+```
+
+### Docker Deployment
+
+```bash
+# Using Docker Compose (recommended for production)
+docker-compose up -d
+
+# Check deployment health
+curl http://localhost:8000/health
+```
+
+## 📊 Health Monitoring
+
+### Health Check Endpoints
+
+When running in server mode, ARIA provides several health endpoints:
+
+- `GET /health` - Basic health check for load balancers
+- `GET /health/deep` - Comprehensive health check with agent testing
+- `GET /metrics` - System and application metrics
+- `GET /status` - Simple status information
+
+### Command Line Health Checks
+
+```bash
+# Quick health check
+python src/aria/main.py health
+
+# Environment validation
+python src/aria/main.py validate
+
+# Run test suite
+python src/aria/main.py test
+```
+
+## 🚨 Troubleshooting 503 Errors
+
+### Common Causes and Solutions
+
+#### 1. Configuration Issues
+```bash
+# Diagnose configuration problems
+python src/aria/main.py validate
+
+# Check specific issues
+curl http://localhost:8000/health/deep
+```
+
+#### 2. Resource Exhaustion
+```bash
+# Check resource usage
+curl http://localhost:8000/metrics
+
+# Monitor in real-time
+watch -n 5 'curl -s http://localhost:8000/metrics | jq .system.resources'
+```
+
+#### 3. API Connectivity
+```bash
+# Test API connections
+python src/aria/main.py health
+
+# Check specific APIs
+curl http://localhost:8000/health/deep | jq .api_connectivity
+```
+
+### Error Categories
+
+The system categorizes errors for better diagnosis:
+- **Startup**: Initialization and configuration errors
+- **Configuration**: YAML and settings issues
+- **Agent**: Agent creation and execution problems
+- **API**: External service connectivity issues
+- **Resource**: System resource constraints
+
+## 📁 Project Structure
+
+```
+ARIA/
+├── src/aria/
+│   ├── main.py              # Enhanced main entry point
+│   ├── crew.py              # CrewAI orchestration
+│   ├── health.py            # Health check system
+│   ├── robust_startup.py    # Startup with retry logic
+│   ├── error_handling.py    # Error management
+│   ├── monitoring.py        # Resource monitoring
+│   ├── validation.py        # Environment validation
+│   ├── api_testing.py       # API connectivity testing
+│   ├── server.py            # Web server with health endpoints
+│   ├── config/
+│   │   ├── agents.yaml      # Agent definitions
+│   │   └── tasks.yaml       # Task definitions
+│   └── tools/               # Custom tools
+├── tests/
+│   └── test_health_systems.py  # Test suite
+├── knowledge/
+│   └── user_preference.txt  # User preferences
+├── logs/                    # Application logs
+├── docker-compose.yml       # Docker deployment
+├── Dockerfile              # Container definition
+├── requirements.txt        # Python dependencies
+├── .env.example           # Environment template
+└── DEPLOYMENT_GUIDE.md    # Detailed deployment guide
+```
+
+## For More Information
+
+See the complete [Deployment Guide](DEPLOYMENT_GUIDE.md) for:
+- Detailed troubleshooting steps
+- Production deployment patterns
+- Kubernetes configuration
+- Monitoring and alerting setup
+- Performance optimization tips
+
+---
+
+**Enhanced ARIA v0.2.0** - Now with comprehensive health monitoring and 503 error prevention! 🎉

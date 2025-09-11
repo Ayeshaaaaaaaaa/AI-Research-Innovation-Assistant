@@ -110,10 +110,7 @@ class Aria():
     def researcher(self) -> Agent:
         """Researcher: uses scholar search + (optionally) summarizer tool to fetch raw findings."""
         return Agent(
-            config=self.agents_config['researcher'],  # must match key in agents.yaml
-            
-            # tools=[SearchScholar()],                 # attach the search tool
-            
+            config=self.agents_config['researcher'],  # must match key in agents.yaml            
             verbose=True,
         )
 

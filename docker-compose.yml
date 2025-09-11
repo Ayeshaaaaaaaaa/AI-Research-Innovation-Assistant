@@ -1,0 +1,70 @@
+# Docker Compose for ARIA CrewAI Application
+# Includes monitoring and health check services
+
+version: '3.8'
+
+services:
+  aria:
+    build: .
+    container_name: aria-app
+    ports:
+      - "8000:8000"
+    environment:
+      - ARIA_ENV=production
+      - LOG_LEVEL=INFO
+      - MAX_CONCURRENT_TASKS=5
+      - API_TIMEOUT=30
+      # API keys should be set via .env file or external secrets
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+    volumes:
+      - ./logs:/app/logs
+      - ./outputs:/app/outputs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "src/aria/main.py", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    networks:
+      - aria-network
+
+  # Optional: Monitoring with Prometheus (uncomment if needed)
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: aria-prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - aria-network
+
+  # Optional: Grafana for dashboards (uncomment if needed)
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: aria-grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+  #   volumes:
+  #     - grafana-storage:/var/lib/grafana
+  #   networks:
+  #     - aria-network
+
+networks:
+  aria-network:
+    driver: bridge
+
+volumes:
+  grafana-storage:
