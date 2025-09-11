@@ -1,0 +1,13 @@
+.env
+__pycache__/
+.DS_Store
+venv
+.qoder
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+venv/
+.env/
