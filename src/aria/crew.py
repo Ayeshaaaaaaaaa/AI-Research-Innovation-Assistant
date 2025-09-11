@@ -113,7 +113,7 @@ class Aria():
             config=self.agents_config['researcher'],  # must match key in agents.yaml
             
             # tools=[SearchScholar()],                 # attach the search tool
-            tools=[CodeInterpreterTool()],
+            
             verbose=True,
         )
 
@@ -124,7 +124,7 @@ class Aria():
             config=self.agents_config['fact_checker'],
             
             # tools=[FactCheckerTool()],
-            tools=[CodeInterpreterTool()],
+            # tools=[CodeInterpreterTool()],
             verbose=True,
         )
 
@@ -135,7 +135,7 @@ class Aria():
             config=self.agents_config['summarizer'],
             
             # tools=[SummarizerTool()],
-            tools=[CodeInterpreterTool()],
+            
             verbose=True,
         )
 
@@ -146,7 +146,7 @@ class Aria():
             config=self.agents_config['writer'],
             
             # tools=[WriterTool()],
-            tools=[CodeInterpreterTool()],
+            
             verbose=True,
         )
 
@@ -157,7 +157,7 @@ class Aria():
             config=self.agents_config['reviewer'],
             
             # tools=[ReviewerTool()],
-            tools=[CodeInterpreterTool()],
+            
             verbose=True,
         )
 
