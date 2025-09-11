@@ -65,14 +65,13 @@
 
 
 
-# src/my_project/crew.py
 from typing import List
 
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 
-# Import your custom tool classes (adjust package name if different)
+from crewai_tools import CodeInterpreterTool
 
 from tools.scholar_tool import SearchScholar
 from tools.summarizer import SummarizerTool
@@ -106,6 +105,7 @@ class Aria():
             config=self.agents_config['researcher'],  # must match key in agents.yaml
             
             # tools=[SearchScholar()],                 # attach the search tool
+            tools=[CodeInterpreterTool()],
             verbose=True,
         )
 
@@ -116,6 +116,7 @@ class Aria():
             config=self.agents_config['fact_checker'],
             
             # tools=[FactCheckerTool()],
+            tools=[CodeInterpreterTool()],
             verbose=True,
         )
 
@@ -126,6 +127,7 @@ class Aria():
             config=self.agents_config['summarizer'],
             
             # tools=[SummarizerTool()],
+            tools=[CodeInterpreterTool()],
             verbose=True,
         )
 
@@ -136,6 +138,7 @@ class Aria():
             config=self.agents_config['writer'],
             
             # tools=[WriterTool()],
+            tools=[CodeInterpreterTool()],
             verbose=True,
         )
 
@@ -146,6 +149,7 @@ class Aria():
             config=self.agents_config['reviewer'],
             
             # tools=[ReviewerTool()],
+            tools=[CodeInterpreterTool()],
             verbose=True,
         )
 
