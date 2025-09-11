@@ -82,17 +82,25 @@ from dotenv import load_dotenv
 import os
 from crewai import LLM
 load_dotenv()
+if os.getenv("HF_TKN") and not os.getenv("HF_TOKEN"):
+    os.environ["HF_TOKEN"] = os.getenv("HF_TKN")
+elif not os.getenv("HF_TKN") and not os.getenv("HF_TOKEN"):
+    print("❌ Error: HuggingFace token not found. Please set HF_TKN or HF_TOKEN in .env")
 
+
+
+
+    
 @CrewBase
 class Aria():
     """
     ARIA Crew - orchestrates the multi-agent research pipeline.
     Agents and tasks are loaded from YAML (agents.yaml / tasks.yaml) via CrewBase.
     """
-
+    
     agents: List[BaseAgent]
     tasks: List[Task]
-
+    
     # -------------------------
     # Agents
     # -------------------------
