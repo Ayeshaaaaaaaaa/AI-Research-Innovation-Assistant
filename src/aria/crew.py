@@ -71,13 +71,13 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 
-from crewai_tools import CodeInterpreterTool
+# from crewai_tools import CodeInterpreterTool
 
-from tools.scholar_tool import SearchScholar
-from tools.summarizer import SummarizerTool
-from tools.fact_check_tool import FactCheckerTool
-from tools.writer_tools import WriterTool
-from tools.review_tools import ReviewerTool
+# from tools.scholar_tool import SearchScholar
+# from tools.summarizer import SummarizerTool
+# from tools.fact_check_tool import FactCheckerTool
+# from tools.writer_tools import WriterTool
+# from tools.review_tools import ReviewerTool
 from dotenv import load_dotenv
 import os
 from crewai import LLM

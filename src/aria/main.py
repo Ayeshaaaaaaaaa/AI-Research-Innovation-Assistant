@@ -69,29 +69,61 @@
 #         raise Exception(f"An error occurred while testing the crew: {e}")
 #!/usr/bin/env python
 
-import sys
+# import sys
+# import warnings
+# from datetime import datetime
+
+# from crew import Aria
+# warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+
+# def run():
+#     """Run the crew."""
+#     inputs = {
+#         "topic": "AI LLMs",
+#         "current_year": str(datetime.now().year)
+#     }
+#     try:
+#         Aria().crew().kickoff(inputs=inputs)
+
+#         print("✅ Crew finished! Check for output files (report.md, reviewed_report.md).")
+#     except Exception as e:
+#         print(f"❌ Error occurred: {e}")
+#         raise
+
+# if __name__ == "__main__":
+#     run()
 import warnings
 from datetime import datetime
+from fastapi import FastAPI, HTTPException, Query
+from pydantic import BaseModel
+from aria.crew import Aria
 
-from crew import Aria
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-def run():
-    """Run the crew."""
+app = FastAPI(title="ARIA Crew API")
+
+class CrewInput(BaseModel):
+    topic: str
+
+@app.post("/run-crew")
+def run_crew(input_data: CrewInput):
+    """
+    Run the ARIA crew for a given topic.
+    """
     inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
+        "topic": input_data.topic,
+        "current_year": str(datetime.now().year),
+        "output_path": "/app/output"
     }
     try:
         Aria().crew().kickoff(inputs=inputs)
-
-        print("✅ Crew finished! Check for output files (report.md, reviewed_report.md).")
+        return {"status": "success", "message": "Crew finished! Check for output files (report.md, reviewed_report.md)."}
     except Exception as e:
-        print(f"❌ Error occurred: {e}")
-        raise
+        raise HTTPException(status_code=500, detail=f"Error occurred: {e}")
 
-if __name__ == "__main__":
-    run()
+@app.get("/")
+def root():
+    return {"message": "Send a POST request to /run-crew with JSON: {'topic': 'Your topic here'}"}
 
     
 # #!/usr/bin/env python
